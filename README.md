@@ -49,9 +49,11 @@ python manage.py createsuperuser
 
 ```bash
 python manage.py runserver
+# Or if port 8000 is in use:
+python manage.py runserver 8080
 ```
 
-7. Access the application at http://127.0.0.1:8000/
+7. Access the application at http://127.0.0.1:8000/ or http://127.0.0.1:8080/ (if using alternative port)
 
 ## System Roles and Access Points
 
