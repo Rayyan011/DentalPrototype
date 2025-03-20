@@ -2,7 +2,17 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 import uuid
+import logging
 from datetime import time
+from appointments.utils.validators import (
+    validate_not_friday,
+    validate_surgery_room_not_in_evening,
+    is_surgery_room_in_evening,
+    check_clinic_shift_capacity,
+    validate_doctor_clinic_limit
+)
+from appointments.utils.constants import SHIFT_TIMES
+from appointments.utils.price_calculator import calculate_price
 
 class UserRole(models.TextChoices):
     CUSTOMER = 'CUSTOMER', 'Customer'
@@ -161,8 +171,45 @@ class Roster(models.Model):
 
     def clean(self):
         # Validate that no service is provided on Friday
-        if self.date.weekday() == 4:  # 4 corresponds to Friday
-            raise ValidationError("No service is available on Fridays.")
+        validate_not_friday(self.date)
+        
+        # Validate the doctor's clinic assignment limit
+        validate_doctor_clinic_limit(self.doctor, self.clinic, self.date)
+        
+        # Check if this doctor already has a roster for this date and shift
+        conflicting_roster = Roster.objects.filter(
+            doctor=self.doctor,
+            date=self.date,
+            shift=self.shift
+        ).exclude(pk=self.pk).first()
+        
+        if conflicting_roster:
+            raise ValidationError(
+                f"This doctor is already assigned to {conflicting_roster.clinic} during this time slot."
+            )
+        
+        # Check if this clinic already has a doctor for this room, date, and shift
+        conflicting_roster = Roster.objects.filter(
+            clinic=self.clinic,
+            date=self.date,
+            shift=self.shift
+        ).exclude(pk=self.pk).first()
+        
+        if conflicting_roster and conflicting_roster.doctor != self.doctor:
+            raise ValidationError(
+                f"This clinic already has a doctor ({conflicting_roster.doctor}) assigned during this time slot."
+            )
+            
+        # Check how many doctors are scheduled for this clinic on this date and shift
+        doctors_count = Roster.objects.filter(
+            clinic=self.clinic,
+            date=self.date,
+            shift=self.shift
+        ).exclude(pk=self.pk).count()
+        
+        # Each clinic can have at most 12 doctors
+        if doctors_count >= 12:
+            raise ValidationError("This clinic already has the maximum number of doctors (12) assigned.")
 
 class Appointment(models.Model):
     STATUS_CHOICES = [
@@ -242,12 +289,27 @@ class Appointment(models.Model):
 
     def clean(self):
         # Validate that no appointment is made on Friday
-        if self.date.weekday() == 4:  # 4 corresponds to Friday
-            raise ValidationError("No service is available on Fridays.")
+        validate_not_friday(self.date)
             
         # Validate that surgery rooms are not booked during evening shifts
-        if self.room.type == RoomType.SURGERY and self.shift == ShiftType.EVENING:
-            raise ValidationError("Surgery rooms are not available during evening shifts.")
+        validate_surgery_room_not_in_evening(self.room.type, self.shift)
+        
+        # Check clinic capacity (10 patients per shift)
+        check_clinic_shift_capacity(self.clinic, self.date, self.shift)
+        
+        # Check if the doctor is assigned to this clinic on this date and shift
+        roster_exists = Roster.objects.filter(
+            doctor=self.doctor,
+            clinic=self.clinic,
+            date=self.date,
+            shift=self.shift,
+            is_active=True
+        ).exists()
+        
+        if not roster_exists:
+            raise ValidationError(
+                "This doctor is not scheduled at this clinic for the selected date and shift."
+            )
 
 class Report(models.Model):
     REPORT_TYPE_CHOICES = [
@@ -270,3 +332,12 @@ class Report(models.Model):
 
     def __str__(self):
         return f"{self.get_report_type_display()} ({self.date_range_start} to {self.date_range_end})"
+
+# Define shift times directly in models.py until we fully refactor
+SHIFT_TIMES = {
+    'MORNING': '08:00 - 12:00',
+    'AFTERNOON': '13:00 - 17:00',
+    'EVENING': '18:00 - 22:00',
+}
+
+logger = logging.getLogger(__name__)

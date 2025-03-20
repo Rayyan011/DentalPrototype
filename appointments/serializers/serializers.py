@@ -1,10 +1,17 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+import logging
 from ..models import (
     Clinic, Room, Doctor, Service, Price, 
     Roster, Appointment, Report
 )
+from ..utils.validators import (
+    validate_not_friday, 
+    validate_surgery_room_not_in_evening,
+    check_clinic_shift_capacity
+)
 
+logger = logging.getLogger(__name__)
 User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
@@ -108,32 +115,56 @@ class AppointmentSerializer(serializers.ModelSerializer):
         return None
     
     def validate(self, data):
-        # Friday validation
-        if data['date'].weekday() == 4:  # 4 corresponds to Friday
-            raise serializers.ValidationError("No service is available on Fridays.")
+        # Friday validation using our utility function
+        try:
+            validate_not_friday(data['date'])
+        except Exception as e:
+            raise serializers.ValidationError(str(e))
         
-        # Surgery room not available in evening
-        if data['room'].type == 'SURGERY' and data['shift'] == 'EVENING':
-            raise serializers.ValidationError("Surgery rooms are not available during evening shifts.")
+        # Surgery room not available in evening using our utility function
+        try:
+            validate_surgery_room_not_in_evening(data['room'].type, data['shift'])
+        except Exception as e:
+            raise serializers.ValidationError(str(e))
+        
+        # Check if the clinic has reached the capacity of 10 patients per shift
+        try:
+            check_clinic_shift_capacity(data['clinic'], data['date'], data['shift'])
+        except Exception as e:
+            raise serializers.ValidationError(str(e))
         
         # Check if doctor is on roster for this clinic, date and shift
-        roster_exists = Roster.objects.filter(
-            doctor=data['doctor'],
-            clinic=data['clinic'],
-            date=data['date'],
-            shift=data['shift'],
-            is_active=True
-        ).exists()
-        
-        if not roster_exists:
+        try:
+            roster_exists = Roster.objects.filter(
+                doctor=data['doctor'],
+                clinic=data['clinic'],
+                date=data['date'],
+                shift=data['shift'],
+                is_active=True
+            ).exists()
+            
+            if not roster_exists:
+                raise serializers.ValidationError(
+                    "This doctor is not scheduled at this clinic for the selected date and shift."
+                )
+        except Exception as e:
+            logger.error(f"Error checking doctor roster: {e}")
             raise serializers.ValidationError(
-                "This doctor is not scheduled at this clinic for the selected date and shift."
+                "Error checking doctor roster: please ensure all data is valid."
             )
         
         # Check if room is available
-        room_available = data['room'].is_available(data['date'], data['shift'])
-        if not room_available:
-            raise serializers.ValidationError("This room is not available for the selected date and shift.")
+        try:
+            room_available = data['room'].is_available(data['date'], data['shift'])
+            if not room_available:
+                raise serializers.ValidationError(
+                    "This room is not available for the selected date and shift."
+                )
+        except Exception as e:
+            logger.error(f"Error checking room availability: {e}")
+            raise serializers.ValidationError(
+                "Error checking room availability: please ensure all data is valid."
+            )
             
         return data
 
