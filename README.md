@@ -53,6 +53,55 @@ python manage.py runserver
 
 7. Access the application at http://127.0.0.1:8000/
 
+## System Roles and Access Points
+
+The Island Dental Booking System implements a robust role-based access control system with five distinct user roles:
+
+### 1. Customer
+- **Access**: http://127.0.0.1:8000/customer-admin/
+- **Credentials**: customer/customer123
+- **Responsibilities**:
+  - Book dental appointments
+  - View personal appointment history
+  - Cancel confirmed appointments
+  - Browse available clinics, doctors, and services
+
+### 2. Doctor
+- **Access**: http://127.0.0.1:8000/doctor-admin/
+- **Credentials**: doctor1/doctor1123, doctor2/doctor2123, doctor3/doctor3123
+- **Responsibilities**:
+  - View their assigned appointments
+  - See their roster and work schedule
+  - Update appointment status (completed, no-show)
+  - View patient information for scheduled appointments
+
+### 3. Administrative Officer
+- **Access**: http://127.0.0.1:8000/officer-admin/
+- **Credentials**: officer/officer123
+- **Responsibilities**:
+  - Manage all appointments in the system
+  - Create, modify, and cancel appointments
+  - Manage doctor rosters and schedules
+  - View and manage clinics, rooms, and services
+
+### 4. Manager
+- **Access**: http://127.0.0.1:8000/manager-admin/
+- **Credentials**: manager/manager123
+- **Responsibilities**:
+  - Complete system access and management
+  - Generate reports (revenue, appointment utilization)
+  - Manage users, clinics, rooms, doctors, and services
+  - Set pricing for services based on shift
+
+### 5. System Admin
+- **Access**: http://127.0.0.1:8000/admin/
+- **Credentials**: admin/admin123
+- **Responsibilities**:
+  - Full Django admin access
+  - Technical administration of the system
+  - Manage user accounts and permissions
+  - Configure system settings
+
 ## API Endpoints
 
 The system provides the following API endpoints:

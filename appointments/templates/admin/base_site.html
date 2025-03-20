@@ -1,0 +1,130 @@
+{% extends "admin/base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static 'appointments/css/custom_admin.css' %}" />
+    
+    {% if request.path|slice:":10" == "/customer/" %}
+    <style>
+        body { 
+            background-color: rgba(40, 167, 69, 0.05);
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: -1;
+            background-image: url('{% static "appointments/img/customer-bg.jpg" %}');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.05;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.body.classList.add('customer-admin');
+        });
+    </script>
+    {% elif request.path|slice:":8" == "/doctor/" %}
+    <style>
+        body { 
+            background-color: rgba(23, 162, 184, 0.05);
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: -1;
+            background-image: url('{% static "appointments/img/doctor-bg.jpg" %}');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.05;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.body.classList.add('doctor-admin');
+        });
+    </script>
+    {% elif request.path|slice:":9" == "/officer/" %}
+    <style>
+        body { 
+            background-color: rgba(111, 66, 193, 0.05);
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: -1;
+            background-image: url('{% static "appointments/img/officer-bg.jpg" %}');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.05;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.body.classList.add('officer-admin');
+        });
+    </script>
+    {% elif request.path|slice:":9" == "/manager/" %}
+    <style>
+        body { 
+            background-color: rgba(253, 126, 20, 0.05);
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: -1;
+            background-image: url('{% static "appointments/img/manager-bg.jpg" %}');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.05;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.body.classList.add('manager-admin');
+        });
+    </script>
+    {% endif %}
+{% endblock %}
+
+{% block welcome-msg %}
+    {% if user.get_full_name %}
+    <strong>{{ user.get_full_name }}</strong> ({{ user.get_role_display }})
+    {% else %}
+    <strong>{{ user.username }}</strong> ({{ user.get_role_display }})
+    {% endif %}
+{% endblock %}
+
+{% block userlinks %}
+    {% if site_url %}
+        <a href="{{ site_url }}">{% translate 'View site' %}</a> /
+    {% endif %}
+    {% if user.is_active and user.is_staff %}
+        {% url 'django-admindocs-docroot' as docsroot %}
+        {% if docsroot %}
+            <a href="{{ docsroot }}">{% translate 'Documentation' %}</a> /
+        {% endif %}
+    {% endif %}
+    {% if user.has_usable_password %}
+        <a href="{% url 'admin:password_change' %}">{% translate 'Change password' %}</a> /
+    {% endif %}
+    <a href="{% url 'logout' %}">{% translate 'Log out' %}</a>
+{% endblock %} 

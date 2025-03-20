@@ -1,0 +1,143 @@
+/* Custom styles for the Django admin interfaces */
+
+/* Main colors */
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #0056b3;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+}
+
+/* Role-specific theme colors */
+body.customer-admin {
+    --primary-color: #28a745;  /* Green for customers */
+    --secondary-color: #1e7e34;
+}
+
+body.doctor-admin {
+    --primary-color: #17a2b8;  /* Blue for doctors */
+    --secondary-color: #138496;
+}
+
+body.officer-admin {
+    --primary-color: #6f42c1;  /* Purple for officers */
+    --secondary-color: #5a32a3;
+}
+
+body.manager-admin {
+    --primary-color: #fd7e14;  /* Orange for managers */
+    --secondary-color: #d56b12;
+}
+
+/* Header branding */
+#header {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+#header a:link, #header a:visited {
+    color: #fff;
+}
+
+div.breadcrumbs {
+    background: var(--secondary-color);
+}
+
+/* Module headers */
+.module h2, .module caption, .inline-group h2 {
+    background: var(--primary-color);
+}
+
+/* Links */
+a:link, a:visited {
+    color: var(--primary-color);
+}
+
+a:hover {
+    color: var(--secondary-color);
+}
+
+/* Buttons */
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+    background: var(--primary-color);
+}
+
+.button:hover, input[type=submit]:hover, input[type=button]:hover, .button:active, input[type=submit]:active, input[type=button]:active {
+    background: var(--secondary-color);
+}
+
+.button.default, input[type=submit].default, .submit-row input.default {
+    background: var(--success-color);
+}
+
+/* Side navigation */
+.object-tools a:link, .object-tools a:visited {
+    background: var(--primary-color);
+}
+
+.object-tools a:hover, .object-tools a:focus {
+    background: var(--secondary-color);
+}
+
+/* Form styles */
+.selector-chosen h2 {
+    background: var(--primary-color) !important;
+}
+
+/* Dashboard styles */
+.dashboard .module table th {
+    background: var(--primary-color);
+}
+
+.dashboard .module table td a:link, .dashboard .module table td a:visited {
+    color: var(--primary-color);
+}
+
+/* Badges for status */
+.status-badge {
+    display: inline-block;
+    padding: 0.25em 0.6em;
+    font-size: 80%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    color: #fff;
+}
+
+.status-badge.confirmed {
+    background-color: var(--info-color);
+}
+
+.status-badge.completed {
+    background-color: var(--success-color);
+}
+
+.status-badge.cancelled {
+    background-color: var(--danger-color);
+}
+
+.status-badge.no-show {
+    background-color: var(--warning-color);
+}
+
+/* Custom table styling */
+#result_list tbody tr:hover {
+    background-color: rgba(0,0,0,0.05);
+}
+
+/* Responsive tweaks */
+@media (max-width: 767px) {
+    #header #user-tools {
+        margin-top: 5px;
+    }
+    
+    .dashboard .module table td {
+        padding: 8px 5px;
+    }
+} 

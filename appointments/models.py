@@ -199,7 +199,8 @@ class Appointment(models.Model):
         if not self.reference:
             self.reference = self.generate_reference()
         
-        if not self.price:
+        # Always calculate price based on service and shift to ensure consistency
+        if self.service and self.shift:
             self.price = self.service.get_price(self.shift)
             
         super().save(*args, **kwargs)

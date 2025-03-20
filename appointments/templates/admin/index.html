@@ -1,0 +1,179 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static "admin/css/dashboard.css" %}">{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  {% if app_list %}
+    <div class="app-{{ app.app_label }} module">
+      <table>
+        <caption>
+          {% if user.role == 'CUSTOMER' %}
+            <h2>Patient Portal</h2>
+          {% elif user.role == 'DOCTOR' %}
+            <h2>Doctor Portal</h2>
+          {% elif user.role == 'ADMIN_OFFICER' %}
+            <h2>Administrative Portal</h2>
+          {% elif user.role == 'MANAGER' %}
+            <h2>Management Portal</h2>
+          {% else %}
+            <h2>System Administration</h2>
+          {% endif %}
+        </caption>
+        
+        {% if user.role == 'CUSTOMER' %}
+        <tr>
+          <th scope="row">
+            <div class="section">
+              <h3>{% translate 'Quick Actions' %}</h3>
+              <ul>
+                <li><a href="{% url 'customer_admin:appointments_appointment_add' %}">{% translate 'Book New Appointment' %}</a></li>
+                <li><a href="{% url 'customer_admin:appointments_appointment_changelist' %}">{% translate 'View My Appointments' %}</a></li>
+                <li><a href="{% url 'customer_admin:appointments_doctor_changelist' %}">{% translate 'Browse Doctors' %}</a></li>
+                <li><a href="{% url 'customer_admin:appointments_service_changelist' %}">{% translate 'Available Services' %}</a></li>
+              </ul>
+            </div>
+          </th>
+        </tr>
+        {% elif user.role == 'DOCTOR' %}
+        <tr>
+          <th scope="row">
+            <div class="section">
+              <h3>{% translate 'Quick Actions' %}</h3>
+              <ul>
+                <li><a href="{% url 'doctor_admin:appointments_appointment_changelist' %}">{% translate 'View Today\'s Appointments' %}</a></li>
+                <li><a href="{% url 'doctor_admin:appointments_roster_changelist' %}">{% translate 'View My Schedule' %}</a></li>
+              </ul>
+            </div>
+          </th>
+        </tr>
+        {% elif user.role == 'ADMIN_OFFICER' %}
+        <tr>
+          <th scope="row">
+            <div class="section">
+              <h3>{% translate 'Quick Actions' %}</h3>
+              <ul>
+                <li><a href="{% url 'officer_admin:appointments_appointment_add' %}">{% translate 'Create New Appointment' %}</a></li>
+                <li><a href="{% url 'officer_admin:appointments_appointment_changelist' %}">{% translate 'Manage Appointments' %}</a></li>
+                <li><a href="{% url 'officer_admin:appointments_roster_changelist' %}">{% translate 'Manage Doctor Schedules' %}</a></li>
+              </ul>
+            </div>
+          </th>
+        </tr>
+        {% elif user.role == 'MANAGER' %}
+        <tr>
+          <th scope="row">
+            <div class="section">
+              <h3>{% translate 'Quick Actions' %}</h3>
+              <ul>
+                <li><a href="{% url 'manager_admin:appointments_customuser_changelist' %}">{% translate 'Manage Users' %}</a></li>
+                <li><a href="{% url 'manager_admin:appointments_appointment_changelist' %}">{% translate 'View All Appointments' %}</a></li>
+                <li><a href="{% url 'manager_admin:appointments_report_changelist' %}">{% translate 'Generate Reports' %}</a></li>
+                <li><a href="{% url 'manager_admin:appointments_report_add' %}">{% translate 'Create New Report' %}</a></li>
+              </ul>
+            </div>
+          </th>
+        </tr>
+        {% endif %}
+      </table>
+    </div>
+    
+    {% for app in app_list %}
+      <div class="app-{{ app.app_label }} module{% if app.app_url in request.path %} current-app{% endif %}">
+        <table>
+          <caption>
+            <a href="{{ app.app_url }}" class="section" title="{% blocktranslate with name=app.name %}Models in the {{ name }} application{% endblocktranslate %}">{{ app.name }}</a>
+          </caption>
+          {% for model in app.models %}
+            <tr class="model-{{ model.object_name|lower }}{% if model.admin_url in request.path %} current-model{% endif %}">
+              {% if model.admin_url %}
+                <th scope="row"><a href="{{ model.admin_url }}"{% if model.admin_url in request.path %} aria-current="page"{% endif %}>{{ model.name }}</a></th>
+              {% else %}
+                <th scope="row">{{ model.name }}</th>
+              {% endif %}
+
+              {% if model.add_url %}
+                <td><a href="{{ model.add_url }}" class="addlink">{% translate 'Add' %}</a></td>
+              {% else %}
+                <td></td>
+              {% endif %}
+
+              {% if model.admin_url and show_changelinks %}
+                {% if model.view_only %}
+                  <td><a href="{{ model.admin_url }}" class="viewlink">{% translate 'View' %}</a></td>
+                {% else %}
+                  <td><a href="{{ model.admin_url }}" class="changelink">{% translate 'Change' %}</a></td>
+                {% endif %}
+              {% else %}
+                <td></td>
+              {% endif %}
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>{% translate 'You don't have permission to view or edit anything.' %}</p>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div id="content-related">
+  <div class="module" id="welcome-section">
+    {% if user.role == 'CUSTOMER' %}
+      <h2>Welcome back, {{ user.get_full_name|default:user.username }}</h2>
+      <p>As a <strong>customer</strong>, you can book and manage your dental appointments with our platform. If you have any questions or concerns, please contact our customer service team.</p>
+    {% elif user.role == 'DOCTOR' %}
+      <h2>Welcome, Dr. {{ user.last_name }}</h2>
+      <p>View your upcoming appointments and schedule. Update appointment status and manage your availability through this portal.</p>
+    {% elif user.role == 'ADMIN_OFFICER' %}
+      <h2>Welcome, {{ user.get_full_name|default:user.username }}</h2>
+      <p>As an <strong>administrative officer</strong>, you can manage appointments, schedules, and basic clinic operations.</p>
+    {% elif user.role == 'MANAGER' %}
+      <h2>Welcome, {{ user.get_full_name|default:user.username }}</h2>
+      <p>As a <strong>manager</strong>, you have full access to the system including user management, reports, and system configuration.</p>
+    {% else %}
+      <h2>Welcome to Island Dental Admin</h2>
+      <p>You are logged in as {{ user.get_full_name|default:user.username }}.</p>
+    {% endif %}
+  </div>
+  
+  <div class="module" id="recent-actions-module">
+    <h2>{% translate 'Recent actions' %}</h2>
+    <h3>{% translate 'My actions' %}</h3>
+    {% load log %}
+    {% get_admin_log 10 as admin_log for_user user %}
+    {% if not admin_log %}
+      <p>{% translate 'None available' %}</p>
+    {% else %}
+      <ul class="actionlist">
+        {% for entry in admin_log %}
+          <li class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}deletelink{% endif %}">
+            {% if entry.is_deletion or not entry.get_admin_url %}
+              {{ entry.object_repr }}
+            {% else %}
+              <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+            {% endif %}
+            <br>
+            {% if entry.content_type %}
+              <span class="mini quiet">{% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}</span>
+            {% else %}
+              <span class="mini quiet">{% translate 'Unknown content' %}</span>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</div>
+{% endblock %} 
