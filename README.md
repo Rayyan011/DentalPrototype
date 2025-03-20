@@ -123,7 +123,38 @@ The system provides the following API endpoints:
 - Surgery rooms are not available during evening shifts (after 17:00)
 - Service prices vary based on the shift (Morning, Afternoon, Evening)
 - Each clinic has 3 rooms (1 surgery room, 2 normal rooms)
-- Doctors rotate across the 3 clinics
+- Each clinic has a maximum capacity of 10 patients per shift
+- Each clinic has a rotation of 12 dentists assigned to it
+- Doctors rotate across the 3 clinics every 5 days in groups
+
+## Setup Commands
+
+The system provides several management commands to help with initial setup and data management:
+
+```bash
+# Set up the complete system with users, permissions, and test data
+python manage.py setup_system
+
+# Set up the clinic locations, rooms, and doctor rotations
+python manage.py setup_clinic_rotation --days 30
+
+# If port 8000 is already in use, run the server on an alternative port
+python manage.py runserver 8080
+```
+
+## Rotation System
+
+The Island Dental Booking System implements a sophisticated doctor rotation system:
+
+1. **Clinic Distribution**: 36 doctors are distributed evenly among the 3 clinics (12 per clinic)
+2. **Shift Assignment**: For each shift (Morning, Afternoon, Evening), 4 doctors are randomly selected from the 12 assigned to the clinic
+3. **Rotation Cycle**: Every 5 days, doctors rotate between clinics to ensure fair distribution of workload
+4. **Business Rules Enforcement**:
+   - No services on Fridays
+   - Maximum of 10 patients per shift per clinic
+   - Surgery rooms unavailable during evening shifts
+
+This rotation system ensures that all doctors get experience in different clinics while maintaining consistent staffing levels at each location.
 
 ## Agile Development Reflection
 
