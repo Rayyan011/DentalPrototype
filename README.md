@@ -1,93 +1,100 @@
-Below is a more polished and clearly structured Markdown-format document that you can use as a README or project documentation.
+Absolutely! Here’s the entire formatted document in copyable Markdown. You can paste it directly into any .md file, such as a README.md:
 
 ⸻
 
-Island Dental Booking System
 
-A web-based booking and management system for Island Dental, a chain of dental clinics in the Maldives.
 
-Project Overview
+# Island Dental Booking System
 
-The Island Dental Booking System provides a comprehensive solution for managing dental clinic operations, from appointment scheduling and doctor rostering to service pricing and reporting. The system emphasizes role-based access control to ensure data security and appropriate functionality for different user types.
+A web-based booking and management system for **Island Dental**, a chain of dental clinics in the Maldives.
 
-Key Features
-	•	Appointment booking and management
-	•	Doctor roster management
-	•	Service and pricing management
-	•	Room allocation with special rules for surgery rooms
-	•	Comprehensive reporting (utilization, revenue, doctor performance, service demand)
-	•	Role-based access control (Customer, Doctor, Administrative Officer, Manager, System Admin)
+## Project Overview
 
-System Architecture
+The **Island Dental Booking System** provides a comprehensive solution for managing dental clinic operations, from appointment scheduling and doctor rostering to service pricing and reporting. The system emphasizes **role-based access control** to ensure data security and appropriate functionality for different user types.
 
-The system is built using the Django framework with a RESTful API backend and customizable admin interfaces.
-	•	Backend: Django, Django REST Framework
-	•	Database: SQLite (development) → PostgreSQL (recommended for production)
-	•	Frontend: Uses Django’s template engine for rendering HTML
+## Key Features
 
-User Roles and Access
+- Appointment booking and management  
+- Doctor roster management  
+- Service and pricing management  
+- Room allocation with special rules for surgery rooms  
+- Comprehensive reporting (utilization, revenue, doctor performance, service demand)  
+- Role-based access control (Customer, Doctor, Administrative Officer, Manager, System Admin)
 
-The system implements robust role-based access control with five distinct user roles:
+## System Architecture
 
-Role	Access URL	Credentials	Responsibilities
-Customer	http://127.0.0.1:8000/customer/	customer/customer123	Book dental appointments, view personal appointment history, cancel confirmed appointments, browse available clinics, doctors, and services.
-Doctor	http://127.0.0.1:8000/doctor/	doctor1/doctor1123	View their assigned appointments, see their roster and work schedule, update appointment status (completed, no-show), view patient information for scheduled appointments.
-Administrative Officer	http://127.0.0.1:8000/officer/	officer/officer123	Manage all appointments in the system, create, modify, and cancel appointments; manage doctor rosters and schedules; view and manage clinics, rooms, and services.
-Manager	http://127.0.0.1:8000/manager/	manager/manager123	Complete system access and management, generate reports (revenue, appointment utilization), manage users, clinics, rooms, doctors, and services; set pricing for services based on shift.
-System Admin	http://127.0.0.1:8000/admin/	admin/admin123	Full Django admin access, technical administration of the system, manage user accounts and permissions, configure system settings.
+The system is built using the **Django** framework with a **RESTful API** backend and customizable admin interfaces.
 
-Database Model (Schema)
+- **Backend:** Django, Django REST Framework  
+- **Database:** SQLite (development) → PostgreSQL (recommended for production)  
+- **Frontend:** Uses Django's template engine for rendering HTML
 
-(Insert an image or diagram of your database schema here.)
+## User Roles and Access
+
+The system implements robust **role-based access control** with five distinct user roles:
+
+| **Role**                | **Access URL**                         | **Credentials**            | **Responsibilities**                                                                                                                                                                                                      |
+|-------------------------|----------------------------------------|----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Customer                | `http://127.0.0.1:8000/customer/`       | `customer/customer123`     | Book dental appointments, view personal appointment history, cancel confirmed appointments, browse available clinics, doctors, and services.                                                                               |
+| Doctor                  | `http://127.0.0.1:8000/doctor/`         | `doctor1/doctor1123`       | View their assigned appointments, see their roster and work schedule, update appointment status (completed, no-show), view patient information for scheduled appointments.                                                 |
+| Administrative Officer  | `http://127.0.0.1:8000/officer/`        | `officer/officer123`       | Manage all appointments in the system, create, modify, and cancel appointments; manage doctor rosters and schedules; view and manage clinics, rooms, and services.                                                         |
+| Manager                 | `http://127.0.0.1:8000/manager/`        | `manager/manager123`       | Complete system access and management, generate reports (revenue, appointment utilization), manage users, clinics, rooms, doctors, and services; set pricing for services based on shift.                                  |
+| System Admin            | `http://127.0.0.1:8000/admin/`          | `admin/admin123`           | Full Django admin access, technical administration of the system, manage user accounts and permissions, configure system settings.                                                                                         |
+
+## Database Model (Schema)
+
+*(Insert an image or diagram of your database schema here.)*
 
 Key models include:
-	•	CustomUser
-	•	Clinic
-	•	Room
-	•	Doctor
-	•	Service
-	•	Price
-	•	Roster
-	•	Appointment
-	•	Report
+- `CustomUser`  
+- `Clinic`  
+- `Room`  
+- `Doctor`  
+- `Service`  
+- `Price`  
+- `Roster`  
+- `Appointment`  
+- `Report`
 
-Relationships:
-	•	Appointments are linked to Customers, Doctors, Clinics, and Services
-	•	Doctor rotations are managed through the Roster model
-	•	Prices are tied to Services and Shifts
+Relationships:  
+- **Appointments** are linked to **Customers**, **Doctors**, **Clinics**, and **Services**  
+- **Doctor rotations** are managed through the **Roster** model  
+- **Prices** are tied to **Services** and **Shifts**
 
-API Endpoints
+## API Endpoints
 
 The system exposes a RESTful API for data access and manipulation. Common endpoints include:
-	•	GET /api/clinics/
-→ List clinics
-	•	POST /api/clinics/
-→ Create a new clinic (requires Manager/Admin)
-	•	GET /api/clinics/{id}/
-→ Retrieve a specific clinic
-	•	PUT /api/clinics/{id}/
-→ Update a clinic (requires Manager/Admin)
-	•	DELETE /api/clinics/{id}/
-→ Delete a clinic (requires Manager/Admin)
-	•	GET /api/rooms/
-→ List rooms
-	•	GET /api/doctors/
-→ List doctors
-	•	GET /api/services/
-→ List services
-	•	GET /api/prices/
-→ List service prices
-	•	GET /api/rosters/
-→ List doctor rosters
-	•	GET /api/appointments/
-→ List appointments
-	•	GET /api/reports/
-→ List or generate reports
-	•	GET /api/doctors/{id}/availability/?date=YYYY-MM-DD
-→ Check doctor availability for a given date
 
-Example API Call (Checking Doctor Availability)
+- `GET /api/clinics/`  
+  → List clinics  
+- `POST /api/clinics/`  
+  → Create a new clinic (requires Manager/Admin)  
+- `GET /api/clinics/{id}/`  
+  → Retrieve a specific clinic  
+- `PUT /api/clinics/{id}/`  
+  → Update a clinic (requires Manager/Admin)  
+- `DELETE /api/clinics/{id}/`  
+  → Delete a clinic (requires Manager/Admin)  
+- `GET /api/rooms/`  
+  → List rooms  
+- `GET /api/doctors/`  
+  → List doctors  
+- `GET /api/services/`  
+  → List services  
+- `GET /api/prices/`  
+  → List service prices  
+- `GET /api/rosters/`  
+  → List doctor rosters  
+- `GET /api/appointments/`  
+  → List appointments  
+- `GET /api/reports/`  
+  → List or generate reports  
+- `GET /api/doctors/{id}/availability/?date=YYYY-MM-DD`  
+  → Check doctor availability for a given date
 
+### Example API Call (Checking Doctor Availability)
+
+```http
 GET /api/doctors/1/availability/?date=2025-03-22
 
 Example Response:
@@ -200,3 +207,6 @@ Key Technologies
 
 Island Dental Booking System © 2025
 Documentation maintained by Rayyan011 and contributors.
+
+---
+
