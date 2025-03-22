@@ -1,9 +1,3 @@
-Absolutely! Here’s the entire formatted document in copyable Markdown. You can paste it directly into any .md file, such as a README.md:
-
-⸻
-
-
-
 # Island Dental Booking System
 
 A web-based booking and management system for **Island Dental**, a chain of dental clinics in the Maldives.
@@ -96,9 +90,11 @@ The system exposes a RESTful API for data access and manipulation. Common endpoi
 
 ```http
 GET /api/doctors/1/availability/?date=2025-03-22
+```
 
-Example Response:
+### Example Response:
 
+```json
 {
     "doctor": "Dr. John Doe (General Dentistry)",
     "date": "2025-03-22",
@@ -106,107 +102,133 @@ Example Response:
         "MORNING"
     ]
 }
+```
 
-Business Rules
-	1.	Scheduling
-	•	No service available on Fridays.
-	•	Surgery rooms are not available during evening shifts (after 17:00).
-	•	Each clinic has a maximum capacity of 10 patients per shift.
-	2.	Pricing
-	•	Service prices vary based on the shift (Morning, Afternoon, Evening).
-	3.	Clinic Structure
-	•	Each clinic has 3 rooms (1 surgery room, 2 normal rooms).
-	4.	Doctor Rotation
-	•	Each clinic has a rotation of 12 dentists assigned to it.
-	•	Doctors rotate across the 3 clinics every 5 days in groups.
+## Business Rules
 
-Installation and Setup
-	1.	Clone the repository:
+### 1. Scheduling
+- No service available on Fridays.
+- Surgery rooms are not available during evening shifts (after 17:00).
+- Each clinic has a maximum capacity of 10 patients per shift.
 
+### 2. Pricing
+- Service prices vary based on the shift (Morning, Afternoon, Evening).
+
+### 3. Clinic Structure
+- Each clinic has 3 rooms (1 surgery room, 2 normal rooms).
+
+### 4. Doctor Rotation
+- Each clinic has a rotation of 12 dentists assigned to it.
+- Doctors rotate across the 3 clinics every 5 days in groups.
+
+---
+
+## Installation and Setup
+
+### 1. Clone the repository:
+
+```bash
 git clone https://github.com/Rayyan011/DentalPrototype
 cd DentalPrototype
+```
 
+### 2. Create a virtual environment and activate it:
 
-	2.	Create a virtual environment and activate it:
-
+```bash
 python -m venv venv
 # On Linux/macOS:
 source venv/bin/activate 
 # On Windows:
 venv\Scripts\activate
+```
 
+### 3. Install dependencies:
 
-	3.	Install dependencies:
-
+```bash
 pip install -r requirements.txt
+```
 
+### 4. Apply migrations:
 
-	4.	Apply migrations:
-
+```bash
 python manage.py migrate
+```
 
+### 5. Create a superuser:
 
-	5.	Create a superuser:
-
+```bash
 python manage.py createsuperuser
+```
 
+### 6. Run the development server:
 
-	6.	Run the development server:
-
+```bash
 python manage.py runserver
 # Or if port 8000 is in use:
 python manage.py runserver 8080
+```
 
+### 7. Access the application at:
 
-	7.	Access the application at:
-	•	http://127.0.0.1:8000/
-	•	or http://127.0.0.1:8080/
+- http://127.0.0.1:8000/
+- or http://127.0.0.1:8080/
 
-Setup Commands
+---
+
+## Setup Commands
 
 Several management commands are provided for initial setup and data population:
 
+```bash
 # Set up the complete system with users, permissions, and test data
 python manage.py setup_system
 
 # Set up the clinic locations, rooms, and doctor rotations
 python manage.py setup_clinic_rotation --days 30
-
-Doctor Rotation Implementation
-
-The setup_clinic_rotation management command configures the doctor rotation. Steps:
-	1.	Distribution:
-	•	36 doctors are grouped and distributed into 3 clinics, each with 12 doctors.
-	2.	Shift Assignment:
-	•	All 12 doctors are assigned to the clinic.
-	•	4 doctors are randomly chosen for each shift (MORNING, AFTERNOON, EVENING).
-	3.	Rotation Cycle:
-	•	Every 5 days, doctors rotate to a different clinic.
-
-Agile Development
-
-Plan:
-	•	Each feature or task was planned based on user stories and requirements.
-
-Implementation:
-	•	Each task was implemented in a separate branch, following feature-driven development.
-
-Testing:
-	•	Automated tests were written using pytest to ensure reliable functionality.
-
-Retrospectives:
-	•	Conducted at the end of each sprint to evaluate progress and adjust the plan.
-
-Key Technologies
-	•	Django / Django REST Framework
-	•	SQLite (for development)
-	•	pytest (for automated testing)
-	•	python-dotenv (for environment variable management)
-
-⸻
-
-Island Dental Booking System © 2025
-Documentation maintained by Rayyan011 and contributors.
+```
 
 ---
 
+## Doctor Rotation Implementation
+
+The `setup_clinic_rotation` management command configures the doctor rotation.
+
+### 1. Distribution:
+- 36 doctors are grouped and distributed into 3 clinics, each with 12 doctors.
+
+### 2. Shift Assignment:
+- All 12 doctors are assigned to the clinic.
+- 4 doctors are randomly chosen for each shift (MORNING, AFTERNOON, EVENING).
+
+### 3. Rotation Cycle:
+- Every 5 days, doctors rotate to a different clinic.
+
+---
+
+## Agile Development
+
+### Plan:
+- Each feature or task was planned based on user stories and requirements.
+
+### Implementation:
+- Each task was implemented in a separate branch, following feature-driven development.
+
+### Testing:
+- Automated tests were written using `pytest` to ensure reliable functionality.
+
+### Retrospectives:
+- Conducted at the end of each sprint to evaluate progress and adjust the plan.
+
+---
+
+## Key Technologies
+
+- Django / Django REST Framework
+- SQLite (for development)
+- pytest (for automated testing)
+- python-dotenv (for environment variable management)
+
+---
+
+**Island Dental Booking System © 2025**  
+Documentation maintained by Rayyan011 and contributors.
