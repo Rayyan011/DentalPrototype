@@ -76,11 +76,7 @@ Returns:
         "MORNING"
     ]
 }
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-IGNORE_WHEN_COPYING_END
+
 Business Rules
 
 The system enforces the following business rules:
@@ -103,67 +99,35 @@ Installation and Setup
 
 Clone the repository:
 
-git clone https://github.com/[YOUR_GITHUB_USERNAME]/island-dental.git
-cd island-dental
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
+git clone https://github.com/Rayyan011/DentalPrototype
+cd DentalPrototype
+
 
 Create a virtual environment and activate it:
 
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
 
 Install dependencies:
 
 pip install -r requirements.txt
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
+
 
 Apply migrations:
 
 python manage.py migrate
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
+
 
 Create a superuser:
 
 python manage.py createsuperuser
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
 
 Run the development server:
 
 python manage.py runserver
 # Or if port 8000 is in use:
 python manage.py runserver 8080
-IGNORE_WHEN_COPYING_START
-content_copy
-download
-Use code with caution.
-Bash
-IGNORE_WHEN_COPYING_END
+
 
 Access the application at http://127.0.0.1:8000/ or http://127.0.0.1:8080/
 
