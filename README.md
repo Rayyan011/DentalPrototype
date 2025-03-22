@@ -1,197 +1,218 @@
+
+
 # Island Dental Booking System
 
 A web-based booking and management system for Island Dental, a chain of dental clinics in the Maldives.
 
-## Features
+## Project Overview
 
-- Appointment booking and management
-- Doctor roster management
-- Service and pricing management
-- Room allocation with special rules for surgery rooms
-- Comprehensive reporting (utilization, revenue, doctor performance, service demand)
-- Role-based access control (Customer, Doctor, Administrative Officer, Manager, System Admin)
+The Island Dental Booking System provides a comprehensive solution for managing dental clinic operations, from appointment scheduling and doctor rostering to service pricing and reporting. The system emphasizes role-based access control to ensure data security and appropriate functionality for different users.
 
-## Installation
+## Key Features
 
-1. Clone the repository:
+*   Appointment booking and management
+*   Doctor roster management
+*   Service and pricing management
+*   Room allocation with special rules for surgery rooms
+*   Comprehensive reporting (utilization, revenue, doctor performance, service demand)
+*   Role-based access control (Customer, Doctor, Administrative Officer, Manager, System Admin)
 
-```bash
-git clone https://github.com/yourusername/island-dental.git
-cd island-dental
-```
+## System Architecture
 
-2. Create a virtual environment and activate it:
+The system is built using the Django framework with a RESTful API backend and customizable admin interfaces. Key components:
 
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+*   **Backend:** Django, Django REST Framework
+*   **Database:** SQLite (development); PostgreSQL (recommended for production)
+*   **Frontend:** Uses Django's template engine for rendering HTML.
 
-3. Install dependencies:
+## User Roles and Access
 
-```bash
-pip install -r requirements.txt
-```
+The system implements robust role-based access control with five distinct user roles:
 
-4. Apply migrations:
+| Role                  | Access URL                 | Credentials | Responsibilities                                                                                                                                                                                                                          |
+| --------------------- | -------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Customer              | http://127.0.0.1:8000/customer/       | customer/customer123       | Book dental appointments, view personal appointment history, cancel confirmed appointments, browse available clinics, doctors, and services.                                                                       |
+| Doctor                | http://127.0.0.1:8000/doctor/         | doctor1/doctor1123       | View their assigned appointments, see their roster and work schedule, update appointment status (completed, no-show), view patient information for scheduled appointments.                                         |
+| Administrative Officer| http://127.0.0.1:8000/officer/        | officer/officer123       | Manage all appointments in the system, create, modify, and cancel appointments, manage doctor rosters and schedules, view and manage clinics, rooms, and services.                                                     |
+| Manager               | http://127.0.0.1:8000/manager/        | manager/manager123       | Complete system access and management, generate reports (revenue, appointment utilization), manage users, clinics, rooms, doctors, and services, set pricing for services based on shift.                            |
+| System Admin          | http://127.0.0.1:8000/admin/          | admin/admin123         | Full Django admin access, technical administration of the system, manage user accounts and permissions, configure system settings.                                                                                |
 
-```bash
-python manage.py migrate
-```
+## Database Model (Schema)
 
-5. Create a superuser:
+[INSERT IMAGE OF MODEL/DATABASE DIAGRAM HERE]
 
-```bash
-python manage.py createsuperuser
-```
-
-6. Run the development server:
-
-```bash
-python manage.py runserver
-# Or if port 8000 is in use:
-python manage.py runserver 8080
-```
-
-7. Access the application at http://127.0.0.1:8000/ or http://127.0.0.1:8080/ (if using alternative port)
-
-## System Roles and Access Points
-
-The Island Dental Booking System implements a robust role-based access control system with five distinct user roles:
-
-### 1. Customer
-- **Access**: http://127.0.0.1:8000/customer-admin/
-- **Credentials**: customer/customer123
-- **Responsibilities**:
-  - Book dental appointments
-  - View personal appointment history
-  - Cancel confirmed appointments
-  - Browse available clinics, doctors, and services
-
-### 2. Doctor
-- **Access**: http://127.0.0.1:8000/doctor-admin/
-- **Credentials**: doctor1/doctor1123, doctor2/doctor2123, doctor3/doctor3123
-- **Responsibilities**:
-  - View their assigned appointments
-  - See their roster and work schedule
-  - Update appointment status (completed, no-show)
-  - View patient information for scheduled appointments
-
-### 3. Administrative Officer
-- **Access**: http://127.0.0.1:8000/officer-admin/
-- **Credentials**: officer/officer123
-- **Responsibilities**:
-  - Manage all appointments in the system
-  - Create, modify, and cancel appointments
-  - Manage doctor rosters and schedules
-  - View and manage clinics, rooms, and services
-
-### 4. Manager
-- **Access**: http://127.0.0.1:8000/manager-admin/
-- **Credentials**: manager/manager123
-- **Responsibilities**:
-  - Complete system access and management
-  - Generate reports (revenue, appointment utilization)
-  - Manage users, clinics, rooms, doctors, and services
-  - Set pricing for services based on shift
-
-### 5. System Admin
-- **Access**: http://127.0.0.1:8000/admin/
-- **Credentials**: admin/admin123
-- **Responsibilities**:
-  - Full Django admin access
-  - Technical administration of the system
-  - Manage user accounts and permissions
-  - Configure system settings
+The database schema includes the following key models: `CustomUser`, `Clinic`, `Room`, `Doctor`, `Service`, `Price`, `Roster`, `Appointment`, and `Report`. Key relationships include: Appointments are linked to Customers, Doctors, Clinics, and Services; Doctor rotations are managed through the Roster model; Prices are tied to Services and Shifts.
 
 ## API Endpoints
 
-The system provides the following API endpoints:
+The system provides the following API endpoints for data access and manipulation:
 
-- `/api/clinics/` - List and manage clinics
-- `/api/rooms/` - List and manage rooms
-- `/api/doctors/` - List and manage doctors
-- `/api/services/` - List and manage services
-- `/api/prices/` - List and manage service prices
-- `/api/rosters/` - List and manage doctor rosters
-- `/api/appointments/` - List and manage appointments
-- `/api/reports/` - List and generate reports
+*   `GET /api/clinics/` - List clinics
+*   `POST /api/clinics/` - Create a new clinic (requires Manager/Admin)
+*   `GET /api/clinics/{id}/` - Retrieve a specific clinic
+*   `PUT /api/clinics/{id}/` - Update a clinic (requires Manager/Admin)
+*   `DELETE /api/clinics/{id}/` - Delete a clinic (requires Manager/Admin)
+*   `GET /api/rooms/` - List rooms
+*   `GET /api/doctors/` - List doctors
+*   `GET /api/services/` - List services
+*   `GET /api/prices/` - List service prices
+*   `GET /api/rosters/` - List doctor rosters
+*   `GET /api/appointments/` - List appointments
+*   `GET /api/reports/` - List and generate reports
+*   `GET /api/doctors/{id}/availability/?date=YYYY-MM-DD` - Check doctor availability for a given date
 
-## Business Rules
+Example API Call (Checking Doctor Availability):
 
-- No service is available on Fridays
-- Surgery rooms are not available during evening shifts (after 17:00)
-- Service prices vary based on the shift (Morning, Afternoon, Evening)
-- Each clinic has 3 rooms (1 surgery room, 2 normal rooms)
-- Each clinic has a maximum capacity of 10 patients per shift
-- Each clinic has a rotation of 12 dentists assigned to it
-- Doctors rotate across the 3 clinics every 5 days in groups
 
-## Setup Commands
+GET /api/doctors/1/availability/?date=2025-03-22
 
-The system provides several management commands to help with initial setup and data management:
+Returns:
 
-```bash
+```json
+{
+    "doctor": "Dr. John Doe (General Dentistry)",
+    "date": "2025-03-22",
+    "available_shifts": [
+        "MORNING"
+    ]
+}
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+IGNORE_WHEN_COPYING_END
+Business Rules
+
+The system enforces the following business rules:
+
+Scheduling:
+
+No service available on Fridays.
+
+Surgery rooms are not available during evening shifts (after 17:00).
+
+Each clinic has a maximum capacity of 10 patients per shift.
+
+Pricing: Service prices vary based on the shift (Morning, Afternoon, Evening).
+
+Clinic Structure: Each clinic has 3 rooms (1 surgery room, 2 normal rooms).
+
+Doctor Rotation: Each clinic has a rotation of 12 dentists assigned to it. Doctors rotate across the 3 clinics every 5 days in groups.
+
+Installation and Setup
+
+Clone the repository:
+
+git clone https://github.com/[YOUR_GITHUB_USERNAME]/island-dental.git
+cd island-dental
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+Bash
+IGNORE_WHEN_COPYING_END
+
+Create a virtual environment and activate it:
+
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+Bash
+IGNORE_WHEN_COPYING_END
+
+Install dependencies:
+
+pip install -r requirements.txt
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+Bash
+IGNORE_WHEN_COPYING_END
+
+Apply migrations:
+
+python manage.py migrate
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+Bash
+IGNORE_WHEN_COPYING_END
+
+Create a superuser:
+
+python manage.py createsuperuser
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+Bash
+IGNORE_WHEN_COPYING_END
+
+Run the development server:
+
+python manage.py runserver
+# Or if port 8000 is in use:
+python manage.py runserver 8080
+IGNORE_WHEN_COPYING_START
+content_copy
+download
+Use code with caution.
+Bash
+IGNORE_WHEN_COPYING_END
+
+Access the application at http://127.0.0.1:8000/ or http://127.0.0.1:8080/
+
+Setup Commands
+
+The system provides several management commands for initial setup and data population:
+
 # Set up the complete system with users, permissions, and test data
 python manage.py setup_system
 
 # Set up the clinic locations, rooms, and doctor rotations
 python manage.py setup_clinic_rotation --days 30
 
-# If port 8000 is already in use, run the server on an alternative port
-python manage.py runserver 8080
-```
+Doctor Rotation Implementation
 
-## Rotation System
+The system uses the setup_clinic_rotation management command to configure the doctor rotation. The implementation consists of the following steps:
 
-The Island Dental Booking System implements a sophisticated doctor rotation system:
+Distribution: 36 doctors are grouped and distributed into 3 clinics, each assigned with 12 doctors
 
-1. **Clinic Distribution**: 36 doctors are distributed evenly among the 3 clinics (12 per clinic)
-2. **Shift Assignment**: For each shift (Morning, Afternoon, Evening), 4 doctors are randomly selected from the 12 assigned to the clinic
-3. **Rotation Cycle**: Every 5 days, doctors rotate between clinics to ensure fair distribution of workload
-4. **Business Rules Enforcement**:
-   - No services on Fridays
-   - Maximum of 10 patients per shift per clinic
-   - Surgery rooms unavailable during evening shifts
+Shift Assignment: All 12 doctor are assigned to the clinic, 4 doctor are randomly chosen during each shift (MORNING, AFTERNOON, EVENING)
 
-This rotation system ensures that all doctors get experience in different clinics while maintaining consistent staffing levels at each location.
+Every 5 days, doctors shift to a different clinic.
 
-## Agile Development Reflection
+Agile Development
 
-The Island Dental Booking System was developed using an agile approach, focusing on iterative development and continuous improvement. The project was broken down into smaller, manageable user stories, with each iteration delivering a working piece of functionality.
+The development was iterative, each of the task was planned, implemented, tested and analyzed at the end to get a general overview:
 
-### Sprint 1: Core Models and Authentication
-We started with the foundational models and authentication system, establishing the database schema and user roles. This included creating the CustomUser, Clinic, Room, Doctor, and Service models, as well as implementing role-based permissions.
+Plan:
 
-### Sprint 2: Booking System
-The second sprint focused on the appointment booking system, including room availability checks, price calculations, and validation rules (e.g., no bookings on Fridays, surgery room restrictions). We also implemented the booking receipt generation feature.
+How was planned
 
-### Sprint 3: Roster Management
-This sprint was dedicated to the doctor roster management system, allowing administrative staff to schedule doctors across different clinics, dates, and shifts. We ensured that doctors couldn't be double-booked and that roster assignments respected business rules.
+Implementation
 
-### Sprint 4: Reporting
-The final sprint concentrated on the reporting features, implementing the four required report types: appointment utilization, revenue, doctor performance, and service demand. We created both stored reports and ad-hoc report generation endpoints.
+What was implemented each task
 
-Throughout the development process, we continuously tested and refined the system, ensuring that each component worked correctly both individually and as part of the integrated whole. User feedback was incorporated after each sprint, leading to improvements in the user experience and functionality.
+Testing
 
-## Individual Contribution Reflection
+How the tasks are tested.
 
-As the lead developer on this project, my contributions spanned across all aspects of the system, from initial design to final implementation. I was responsible for:
+Retrospectives
 
-1. **System Architecture**: Designing the overall structure of the application, including the database schema, API endpoints, and authentication system.
+Key Technologies
 
-2. **Core Backend Development**: Implementing the Django models, serializers, viewsets, and business logic that form the backbone of the system.
+Django/Django REST Framework
 
-3. **Security Implementation**: Ensuring that the system enforces appropriate access controls, with each user only able to access the data and functionality relevant to their role.
+SQLite (development database)
 
-4. **Testing**: Writing comprehensive tests to verify that the system functions correctly and handles edge cases appropriately.
+pytest
 
-During development, I considered several emerging technologies:
+python-dotenv
 
-- **Django Channels**: For real-time updates of appointment status and availability, though this was decided against for the initial release to reduce complexity.
-- **GraphQL**: As an alternative to REST for more flexible queries, but REST was chosen for better compatibility with the existing ecosystem.
-- **Docker**: For containerization, which would simplify deployment but was deferred to a future release.
 
-The most significant learning experience was balancing flexibility with performance, especially in the reporting system where complex database queries needed to be optimized while still providing comprehensive data analysis capabilities.
-
-In future iterations, I would recommend exploring integration with payment gateways for online payments, implementing notifications via SMS or email, and developing a more sophisticated mobile interface for customers. 
