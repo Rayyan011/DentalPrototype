@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+db.sqlite3
+venv/
+static/
+media/
+.git/
+.DS_Store
+code documentation (1).docx
+~$de documentation (1).docx

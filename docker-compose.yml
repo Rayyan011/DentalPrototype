@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_USER: dental
+      POSTGRES_PASSWORD: dental
+      POSTGRES_DB: dental_db
+    ports:
+      - "5432:5432"
+    healthcheck:
+     test: ["CMD-SHELL", "pg_isready -U dental -d dental_db"]
+     interval: 10s
+     timeout: 5s
+     retries: 5
+    restart: always
+
+  web:
+    build: .
+    # Removed migrations from command to be run manually or via setup_system
+    command: gunicorn --bind 0.0.0.0:8000 dentaclinic.wsgi:application
+    volumes:
+      - .:/app
+    ports:
+      - "8008:8000" # Using port 8008 on the host
+    depends_on:
+      db:
+        condition: service_healthy # Ensure DB is healthy before starting web
+    environment:
+      SECRET_KEY: "your_django_secret_key" # Change this!
+      DEBUG: "1" # Set to "0" in production
+      DB_HOST: db
+      DB_NAME: dental_db
+      DB_USER: dental
+      DB_PASSWORD: dental
+      DJANGO_SETTINGS_MODULE: dentaclinic.settings # Added settings module
+    restart: always
+
+  frontend:
+    build: ./frontend # Build from the ./frontend directory
+    ports:
+      - "3000:80" # Map host port 3000 to container port 80 (default for Nginx)
+    depends_on:
+      - web # Frontend depends on the web service (API)
+    restart: always
+
+volumes:
+  postgres_data:
+
+

@@ -1,4 +1,8 @@
 Django>=5.1.0,<5.2.0
 djangorestframework>=3.15.0,<3.16.0
 pytest>=7.4.0,<7.5.0
-pytest-django>=4.5.0,<4.6.0 
+pytest-django>=4.5.0,<4.6.0
+dj-database-url
+psycopg2-binary
+gunicorn
+django-cors-headers
