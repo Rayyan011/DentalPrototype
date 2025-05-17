@@ -5,9 +5,6 @@ from .appointment_views import AppointmentViewSet
 from .report_views import ReportViewSet
 from rest_framework import routers
 
-# Import the get_csrf_token view from appointments/views.py
-from .views import get_csrf_token # <--- ADD THIS LINE
-
 # Create a router for the API
 router = routers.DefaultRouter()
 router.register(r'clinics', ClinicViewSet)

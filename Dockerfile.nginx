@@ -1,0 +1,10 @@
+# ./Dockerfile.nginx
+
+# Use the official lightweight Nginx image
+FROM nginx:1.25-alpine
+
+# Expose port 80 for HTTP traffic
+EXPOSE 80
+
+# Default command to start Nginx
+CMD ["nginx", "-g", "daemon off;"]

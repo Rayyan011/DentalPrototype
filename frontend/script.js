@@ -36,13 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fetch CSRF token on page load
     async function fetchCsrfToken() {
         try {
-            // This GET request should hit the Django /csrf/ view via the host port
-            // The @ensure_csrf_cookie decorator on that view will set the csrftoken cookie
-            await fetch(CSRF_URL);
+            await fetch(CSRF_URL, { credentials: 'include' });
             console.log('CSRF token fetched and cookie set.');
         } catch (error) {
             console.error('Error fetching CSRF token:', error);
-            // Handle error - maybe disable login form or show a message
             loginMessageDiv.textContent = 'Could not fetch security token. Login may not work.';
             loginMessageDiv.className = 'mb-4 text-center text-sm text-orange-600';
         }
@@ -76,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     'X-CSRFToken': csrftoken, // Include the CSRF token in the headers
                 },
                 body: JSON.stringify({ username, password }),
+                credentials: 'include',
             });
 
             // Check if the response is successful (status code 2xx)
