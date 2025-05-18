@@ -234,15 +234,15 @@ The `setup_clinic_rotation` management command configures the doctor rotation.
 Documentation maintained by Rayyan011 and contributors.
 
 ## Docker setup 
--git clone -b dev https://github.com/Rayyan011/DentalPrototype.git
--docker-compose up -d --build
--docker-compose run --rm backend python manage.py migrate
--docker-compose run --rm backend python manage.py createsuperuser
--docker-compose run --rm backend python manage.py setup_system
--docker-compose run --rm backend python manage.py setup_clinic_rotation --days 30
-The landing page is http://127.0.0.1:8080/
+- git clone -b dev https://github.com/Rayyan011/DentalPrototype.git
+- docker-compose up -d --build
+- docker-compose run --rm backend python manage.py migrate
+- docker-compose run --rm backend python manage.py createsuperuser
+- docker-compose run --rm backend python manage.py setup_system
+- docker-compose run --rm backend python manage.py setup_clinic_rotation --days 30
+- The landing page is http://127.0.0.1:8080/
 
 ## Manage Docker Containers through portainer
-https://docs.portainer.io/start/install-ce/server/docker/wsl
+- https://docs.portainer.io/start/install-ce/server/docker/wsl
 
-It would be easer to attach to docker Containers using a GUI do commands as well as get logs to help you in the development process
+- It would be easer to attach to docker Containers using a GUI do commands as well as get logs to help you in the development process
