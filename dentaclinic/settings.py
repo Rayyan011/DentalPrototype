@@ -155,7 +155,7 @@ REST_FRAMEWORK = {
 
 # Login/Logout URLs
 LOGIN_URL = 'login' # Refers to the URL name
-LOGIN_REDIRECT_URL = 'home' # Refers to the URL name
+LOGIN_REDIRECT_URL = 'landing_page' # Refers to the URL name
 LOGOUT_REDIRECT_URL = 'login' # Refers to the URL name
 
 # Optional: For Nginx proxy setups if it's handling HTTPS

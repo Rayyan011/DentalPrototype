@@ -1,0 +1,134 @@
+{% extends "appointments/base.html" %}
+{% load static %}
+
+{% block title %}Welcome to Island Dental{% endblock %}
+
+{% block header %}Welcome to Island Dental{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="jumbotron">
+        <h1 class="display-4">Island Dental Booking System</h1>
+        <p class="lead">Your premier choice for dental care in the Maldives. Browse our services and book your appointment today!</p>
+        <hr class="my-4">
+        <p>Ready to manage your dental health or explore our offerings?</p>
+        <a class="btn btn-primary btn-lg mb-2" href="{% url 'login' %}" role="button">Login / Register</a>
+        <a class="btn btn-info btn-lg mb-2" href="#services" role="button">Our Services</a>
+        <a class="btn btn-success btn-lg mb-2" href="#clinics" role="button">Our Clinics</a>
+    </div>
+
+    <section id="services" class="my-5">
+        <h2>Our Services</h2>
+        <div id="services-list" class="row">
+            <p>Loading services...</p>
+        </div>
+    </section>
+
+    <section id="clinics" class="my-5">
+        <h2>Our Clinics</h2>
+        <div id="clinics-list" class="row">
+            <p>Loading clinics...</p>
+        </div>
+    </section>
+
+    <section id="doctors" class="my-5">
+        <h2>Meet Our Doctors</h2>
+        <div id="doctors-list" class="row">
+            <p>Loading doctors...</p>
+        </div>
+    </section>
+
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const apiBaseUrl = '/api'; // Assuming your API is at /api/
+
+    // Fetch and display services
+    fetch(`${apiBaseUrl}/services/`)
+        .then(response => response.json())
+        .then(data => {
+            const servicesList = document.getElementById('services-list');
+            servicesList.innerHTML = ''; // Clear loading message
+            // Check if data is paginated
+            const services = data.results ? data.results : data; 
+            services.forEach(service => {
+                const col = document.createElement('div');
+                col.className = 'col-md-4 mb-3';
+                col.innerHTML = `
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${service.name}</h5>
+                            <p class="card-text">${service.description.substring(0, 100)}...</p>
+                            <p class="card-text"><small class="text-muted">Type: ${service.type.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}</small></p>
+                        </div>
+                    </div>
+                `;
+                servicesList.appendChild(col);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching services:', error);
+            document.getElementById('services-list').innerHTML = '<p>Could not load services at this time.</p>';
+        });
+
+    // Fetch and display clinics
+    fetch(`${apiBaseUrl}/clinics/`)
+        .then(response => response.json())
+        .then(data => {
+            const clinicsList = document.getElementById('clinics-list');
+            clinicsList.innerHTML = ''; // Clear loading message
+            const clinics = data.results ? data.results : data;
+            clinics.forEach(clinic => {
+                const col = document.createElement('div');
+                col.className = 'col-md-4 mb-3';
+                col.innerHTML = `
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${clinic.name}</h5>
+                            <p class="card-text">Location: ${clinic.location}</p>
+                            <p class="card-text">Phone: ${clinic.phone}</p>
+                        </div>
+                    </div>
+                `;
+                clinicsList.appendChild(col);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching clinics:', error);
+            document.getElementById('clinics-list').innerHTML = '<p>Could not load clinics at this time.</p>';
+        });
+
+    // Fetch and display doctors
+    fetch(`${apiBaseUrl}/doctors/`)
+        .then(response => response.json())
+        .then(data => {
+            const doctorsList = document.getElementById('doctors-list');
+            doctorsList.innerHTML = ''; // Clear loading message
+            const doctors = data.results ? data.results : data;
+            doctors.forEach(doctor => {
+                // The doctor object from your API might be nested if you use UserSerializer
+                // Adjust according to your DoctorSerializer structure
+                let doctorName = doctor.user ? `${doctor.user.first_name} ${doctor.user.last_name}` : 'Dr. Available';
+                if (doctorName.trim() === '') doctorName = doctor.user ? doctor.user.username : 'Dr. Available';
+
+                const col = document.createElement('div');
+                col.className = 'col-md-4 mb-3';
+                col.innerHTML = `
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${doctorName}</h5>
+                            <p class="card-text">Specialization: ${doctor.specialization}</p>
+                        </div>
+                    </div>
+                `;
+                doctorsList.appendChild(col);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching doctors:', error);
+            document.getElementById('doctors-list').innerHTML = '<p>Could not load doctors at this time.</p>';
+        });
+});
+</script>
+{% endblock %}
