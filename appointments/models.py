@@ -43,7 +43,6 @@ class CustomUser(AbstractUser):
         choices=UserRole.choices,
         default=UserRole.CUSTOMER
     )
-
     def __str__(self):
         return f"{self.username} ({self.get_role_display()})"
 
