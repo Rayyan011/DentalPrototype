@@ -240,3 +240,4 @@ Documentation maintained by Rayyan011 and contributors.
 -docker-compose run --rm backend python manage.py createsuperuser
 -docker-compose run --rm backend python manage.py setup_system
 -docker-compose run --rm backend python manage.py setup_clinic_rotation --days 30
+The landing page is http://127.0.0.1:8080/
