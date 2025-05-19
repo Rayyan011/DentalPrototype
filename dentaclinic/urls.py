@@ -26,6 +26,7 @@ from appointments.admin_sites import (
     admin_officer_admin_site, manager_admin_site
 )
 from appointments.views.auth_views import RoleBasedLoginView, LogoutView
+from appointments.views.main_views import landing_page
 from django.views.generic import RedirectView
 
 router = routers.DefaultRouter()
@@ -40,7 +41,7 @@ router.register(r'reports', ReportViewSet)
 
 urlpatterns = [
     # Auth views
-    path('', RedirectView.as_view(url='login/', permanent=False), name='home'),
+    path('', landing_page, name='landing_page'),
     path('login/', RoleBasedLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     

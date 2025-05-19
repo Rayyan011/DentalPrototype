@@ -56,7 +56,7 @@
     <!-- Top Navigation -->
     <nav class="navbar navbar-expand-md navbar-dark bg-primary fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% if user.is_authenticated %}{% url 'home' %}{% else %}{% url 'login' %}{% endif %}">
+            <a class="navbar-brand" href="{% if user.is_authenticated %}{% url 'landing_page' %}{% else %}{% url 'login' %}{% endif %}">
                 Island Dental
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
