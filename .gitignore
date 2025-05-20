@@ -72,7 +72,7 @@ coverage/
 dist/ # If you had a separate Vite build output in root
 
 # Tailwind specific generated files (output.css IS generated)
-static/css/output.css # Add this!
+static/css/output.css
 
 # Operating System Files
 .DS_Store
