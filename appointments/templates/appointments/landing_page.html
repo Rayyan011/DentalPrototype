@@ -1,134 +1,117 @@
-{% extends "appointments/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 
-{% block title %}Welcome to Island Dental{% endblock %}
+{% block title %}Welcome - Island Dental Booking{% endblock %}
 
-{% block header %}Welcome to Island Dental{% endblock %}
+{% block messages_override %}
+    <!-- Global messages are suppressed on the landing page. -->
+{% endblock messages_override %}
+
+{% block extra_head %}
+    <style>
+        /* Optional: Page-specific styles for hero background if needed */
+        /* .hero-section { background-image: url("{% static 'images/your_hero_image.jpg' %}"); } */
+    </style>
+{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="jumbotron">
-        <h1 class="display-4">Island Dental Booking System</h1>
-        <p class="lead">Your premier choice for dental care in the Maldives. Browse our services and book your appointment today!</p>
-        <hr class="my-4">
-        <p>Ready to manage your dental health or explore our offerings?</p>
-        <a class="btn btn-primary btn-lg mb-2" href="{% url 'login' %}" role="button">Login / Register</a>
-        <a class="btn btn-info btn-lg mb-2" href="#services" role="button">Our Services</a>
-        <a class="btn btn-success btn-lg mb-2" href="#clinics" role="button">Our Clinics</a>
+{# Hero Section #}
+<section class="hero-section bg-secondary py-16 sm:py-20 text-center">
+    <div class="container mx-auto px-4">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-primary mb-6">
+            Your Smile, Our Priority
+        </h1>
+        <p class="text-lg sm:text-xl text-text-light mb-8 max-w-2xl mx-auto">
+            Experience exceptional dental care with Island Dental. Easily book appointments online at any of our clinics across the Maldives.
+        </p>
+        <!-- Buttons Container: Stacks vertically on mobile, row on sm screens and up -->
+        <div class="flex flex-col sm:flex-row sm:justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mt-8">
+            <a href="{% url 'login' %}" class="w-full sm:w-auto bg-primary text-white font-semibold py-3 px-8 rounded-base hover:bg-green-700 transition-colors duration-150 ease-in-out text-lg shadow-md hover:shadow-lg text-center">
+                Book an Appointment
+            </a>
+            <a href="#services" class="w-full sm:w-auto text-primary font-semibold py-3 px-8 rounded-base hover:text-green-700 transition-colors duration-150 ease-in-out text-lg border-2 border-primary hover:bg-green-50 text-center">
+                Learn More
+            </a>
+        </div>
     </div>
+</section>
 
-    <section id="services" class="my-5">
-        <h2>Our Services</h2>
-        <div id="services-list" class="row">
-            <p>Loading services...</p>
+{# Services Section #}
+<section id="services" class="py-16 bg-light-bg">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl sm:text-4xl font-bold text-primary text-center mb-12">
+            Our Comprehensive Services
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-lg shadow-lg text-center transform hover:scale-105 transition-transform duration-300">
+                <div class="h-16 w-16 mx-auto mb-6 rounded-full bg-secondary flex items-center justify-center">
+                    <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m0 6H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h3 class="text-xl font-semibold text-primary mb-3">Preventive Care</h3>
+                <p class="text-muted-text text-sm leading-relaxed">
+                    Regular check-ups, cleanings, and x-rays to maintain your oral health and prevent future problems.
+                </p>
+            </div>
+            <div class="bg-white p-8 rounded-lg shadow-lg text-center transform hover:scale-105 transition-transform duration-300">
+                <div class="h-16 w-16 mx-auto mb-6 rounded-full bg-secondary flex items-center justify-center">
+                     <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v2a2 2 0 01-2 2H5a2 2 0 01-2-2v-2a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg> <!-- Different Icon -->
+                </div>
+                <h3 class="text-xl font-semibold text-primary mb-3">Restorative Dentistry</h3>
+                <p class="text-muted-text text-sm leading-relaxed">
+                    Solutions like fillings, crowns, bridges, and dental implants to restore the function and appearance of your teeth.
+                </p>
+            </div>
+            <div class="bg-white p-8 rounded-lg shadow-lg text-center transform hover:scale-105 transition-transform duration-300">
+                <div class="h-16 w-16 mx-auto mb-6 rounded-full bg-secondary flex items-center justify-center">
+                    <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-12v4m-2-2h4m5 10v4m-2-2h4M5 3a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2H5z"></path></svg>
+                </div>
+                <h3 class="text-xl font-semibold text-primary mb-3">Cosmetic Dentistry</h3>
+                <p class="text-muted-text text-sm leading-relaxed">
+                    Enhance your smile with treatments like teeth whitening, veneers, and bonding for a confident look.
+                </p>
+            </div>
         </div>
-    </section>
-
-    <section id="clinics" class="my-5">
-        <h2>Our Clinics</h2>
-        <div id="clinics-list" class="row">
-            <p>Loading clinics...</p>
-        </div>
-    </section>
-
-    <section id="doctors" class="my-5">
-        <h2>Meet Our Doctors</h2>
-        <div id="doctors-list" class="row">
-            <p>Loading doctors...</p>
-        </div>
-    </section>
-
     </div>
+</section>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const apiBaseUrl = '/api'; // Assuming your API is at /api/
+{# Clinics Section #}
+<section id="clinics" class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl sm:text-4xl font-bold text-primary text-center mb-12">
+            Visit Our Clinics
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="border border-border-gray p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                <h3 class="text-xl font-semibold text-primary mb-2">Male' Clinic</h3>
+                <p class="text-muted-text text-sm">Orchid Magu, Male' 20095</p>
+                <p class="text-muted-text text-sm mt-1">+960 333-1234</p>
+            </div>
+            <div class="border border-border-gray p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                <h3 class="text-xl font-semibold text-primary mb-2">Kulhudhufushi Clinic</h3>
+                <p class="text-muted-text text-sm">Main Street, Kulhudhufushi 03000</p>
+                <p class="text-muted-text text-sm mt-1">+960 333-5678</p>
+            </div>
+            <div class="border border-border-gray p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                <h3 class="text-xl font-semibold text-primary mb-2">Addu City Clinic</h3>
+                <p class="text-muted-text text-sm">Hithadhoo, Addu City 19020</p>
+                <p class="text-muted-text text-sm mt-1">+960 333-9012</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-    // Fetch and display services
-    fetch(`${apiBaseUrl}/services/`)
-        .then(response => response.json())
-        .then(data => {
-            const servicesList = document.getElementById('services-list');
-            servicesList.innerHTML = ''; // Clear loading message
-            // Check if data is paginated
-            const services = data.results ? data.results : data; 
-            services.forEach(service => {
-                const col = document.createElement('div');
-                col.className = 'col-md-4 mb-3';
-                col.innerHTML = `
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">${service.name}</h5>
-                            <p class="card-text">${service.description.substring(0, 100)}...</p>
-                            <p class="card-text"><small class="text-muted">Type: ${service.type.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase())}</small></p>
-                        </div>
-                    </div>
-                `;
-                servicesList.appendChild(col);
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching services:', error);
-            document.getElementById('services-list').innerHTML = '<p>Could not load services at this time.</p>';
-        });
-
-    // Fetch and display clinics
-    fetch(`${apiBaseUrl}/clinics/`)
-        .then(response => response.json())
-        .then(data => {
-            const clinicsList = document.getElementById('clinics-list');
-            clinicsList.innerHTML = ''; // Clear loading message
-            const clinics = data.results ? data.results : data;
-            clinics.forEach(clinic => {
-                const col = document.createElement('div');
-                col.className = 'col-md-4 mb-3';
-                col.innerHTML = `
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">${clinic.name}</h5>
-                            <p class="card-text">Location: ${clinic.location}</p>
-                            <p class="card-text">Phone: ${clinic.phone}</p>
-                        </div>
-                    </div>
-                `;
-                clinicsList.appendChild(col);
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching clinics:', error);
-            document.getElementById('clinics-list').innerHTML = '<p>Could not load clinics at this time.</p>';
-        });
-
-    // Fetch and display doctors
-    fetch(`${apiBaseUrl}/doctors/`)
-        .then(response => response.json())
-        .then(data => {
-            const doctorsList = document.getElementById('doctors-list');
-            doctorsList.innerHTML = ''; // Clear loading message
-            const doctors = data.results ? data.results : data;
-            doctors.forEach(doctor => {
-                // The doctor object from your API might be nested if you use UserSerializer
-                // Adjust according to your DoctorSerializer structure
-                let doctorName = doctor.user ? `${doctor.user.first_name} ${doctor.user.last_name}` : 'Dr. Available';
-                if (doctorName.trim() === '') doctorName = doctor.user ? doctor.user.username : 'Dr. Available';
-
-                const col = document.createElement('div');
-                col.className = 'col-md-4 mb-3';
-                col.innerHTML = `
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">${doctorName}</h5>
-                            <p class="card-text">Specialization: ${doctor.specialization}</p>
-                        </div>
-                    </div>
-                `;
-                doctorsList.appendChild(col);
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching doctors:', error);
-            document.getElementById('doctors-list').innerHTML = '<p>Could not load doctors at this time.</p>';
-        });
-});
-</script>
+{# Call to Action Section #}
+<section class="py-16 sm:py-20 bg-primary">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6">
+            Ready for a Healthier, Brighter Smile?
+        </h2>
+        <p class="text-lg sm:text-xl text-secondary mb-8 max-w-xl mx-auto leading-relaxed">
+            Our friendly team is here to help. Book your appointment today!
+        </p>
+        <a href="{% url 'login' %}" class="bg-accent text-text-light font-semibold py-3 px-10 rounded-base hover:opacity-80 transition-opacity duration-150 ease-in-out text-lg shadow-md hover:shadow-lg">
+            Schedule Your Visit
+        </a>
+    </div>
+</section>
 {% endblock %}

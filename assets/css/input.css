@@ -1,0 +1,38 @@
+/* DentalPrototype/assets/css/input.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
+  Optional: Add any custom base styles or CSS variables here.
+  Tailwind's "base" layer (Preflight) handles a lot of browser normalization.
+*/
+
+body {
+  /* Example of applying Tailwind utilities to the body for default styling.
+     You can also apply these directly to the <body> tag in your base.html,
+     which is often preferred for clarity.
+  */
+  /* @apply font-sans bg-light-bg text-text-light antialiased; */
+
+  /* If you defined colors as CSS variables and want to use them globally: */
+  /*
+  --primary-color: #2E7D32;
+  --secondary-color: #A5D6A7;
+  --accent-color: #FFC107;
+  --light-background: #F9FAFB;
+  --text-light-mode: #212121;
+  */
+  /* background-color: var(--light-background); */
+  /* color: var(--text-light-mode); */
+}
+
+/* 
+  Optional: Define custom components using @apply.
+  Example:
+  .btn-custom-primary {
+    @apply bg-primary text-white font-semibold py-2 px-4 rounded-base hover:bg-green-700 transition-colors duration-150;
+  }
+  (This assumes 'primary' and 'rounded-base' are defined in your tailwind.config.js theme)
+*/

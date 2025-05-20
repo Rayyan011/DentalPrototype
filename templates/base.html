@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Island Dental Booking{% endblock %}</title>
+    
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-light-bg text-text-light font-sans flex flex-col min-h-screen antialiased">
+    <!-- 
+      Body classes explained:
+      - bg-light-bg: Custom background color (from tailwind.config.js)
+      - text-text-light: Custom text color for light mode
+      - font-sans: Tailwind's default sans-serif font stack
+      - flex flex-col min-h-screen: Creates a sticky footer layout
+      - antialiased: Improves font rendering
+    -->
+
+    <header class="bg-primary text-white shadow-lg sticky top-0 z-50">
+        <!-- 
+          Header classes explained:
+          - bg-primary: Your primary color
+          - text-white: Ensures text is white on this background
+          - shadow-lg: Adds a prominent shadow
+          - sticky top-0 z-50: Makes the header stick to the top during scroll
+        -->
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <a href="{% url 'landing_page' %}" class="text-xl sm:text-2xl font-bold hover:text-secondary transition-colors duration-150 ease-in-out">
+                    Island Dental
+                </a>
+                <nav>
+                    <button id="mobile-menu-button" aria-label="Open Menu" class="sm:hidden text-white focus:outline-none p-2 -mr-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                    <ul id="desktop-menu" class="hidden sm:flex space-x-3 md:space-x-4 items-center">
+                        <li><a href="{% url 'landing_page' %}#services" class="px-3 py-2 rounded-base text-sm font-medium hover:bg-secondary hover:text-primary transition-colors duration-150 ease-in-out">Services</a></li>
+                        <li><a href="{% url 'landing_page' %}#clinics" class="px-3 py-2 rounded-base text-sm font-medium hover:bg-secondary hover:text-primary transition-colors duration-150 ease-in-out">Clinics</a></li>
+                        {% if user.is_authenticated %}
+                            {% if user.role == 'CUSTOMER' %}
+                                <li><a href="{% url 'customer_admin:index' %}" class="bg-secondary text-primary px-3 py-2 rounded-base text-sm font-semibold hover:bg-green-200 transition-colors duration-150 ease-in-out">My Portal</a></li>
+                            {% elif user.role == 'DOCTOR' %}
+                                <li><a href="{% url 'doctor_admin:index' %}" class="bg-secondary text-primary px-3 py-2 rounded-base text-sm font-semibold hover:bg-green-200 transition-colors duration-150 ease-in-out">Doctor Portal</a></li>
+                            {% elif user.role == 'ADMIN_OFFICER' %}
+                                <li><a href="{% url 'officer_admin:index' %}" class="bg-secondary text-primary px-3 py-2 rounded-base text-sm font-semibold hover:bg-green-200 transition-colors duration-150 ease-in-out">Officer Portal</a></li>
+                            {% elif user.role == 'MANAGER' %}
+                                <li><a href="{% url 'manager_admin:index' %}" class="bg-secondary text-primary px-3 py-2 rounded-base text-sm font-semibold hover:bg-green-200 transition-colors duration-150 ease-in-out">Manager Portal</a></li>
+                            {% elif user.is_superuser %}
+                                 <li><a href="{% url 'admin:index' %}" class="bg-secondary text-primary px-3 py-2 rounded-base text-sm font-semibold hover:bg-green-200 transition-colors duration-150 ease-in-out">Admin Panel</a></li>
+                            {% endif %}
+                            <li><a href="{% url 'logout' %}" class="px-3 py-2 rounded-base text-sm font-medium hover:bg-secondary hover:text-primary transition-colors duration-150 ease-in-out">Logout ({{ user.username|truncatechars:10 }})</a></li>
+                        {% else %}
+                            <li><a href="{% url 'login' %}" class="bg-accent text-text-light px-4 py-2 rounded-base text-sm font-semibold hover:opacity-80 transition-opacity duration-150 ease-in-out">Login / Sign Up</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <!-- Mobile Menu (hidden by default, shown by JS) -->
+        <div id="mobile-menu" class="sm:hidden hidden bg-primary border-t border-green-700">
+            <ul class="px-2 pt-2 pb-3 space-y-1">
+                <li><a href="{% url 'landing_page' %}#services" class="block px-3 py-2 rounded-base text-base font-medium hover:bg-secondary hover:text-primary transition-colors duration-150 ease-in-out">Services</a></li>
+                <li><a href="{% url 'landing_page' %}#clinics" class="block px-3 py-2 rounded-base text-base font-medium hover:bg-secondary hover:text-primary transition-colors duration-150 ease-in-out">Clinics</a></li>
+                 {% if user.is_authenticated %}
+                    {% if user.role == 'CUSTOMER' %}
+                        <li><a href="{% url 'customer_admin:index' %}" class="block bg-secondary text-primary px-3 py-2 rounded-base text-base font-semibold hover:bg-green-200 transition-colors duration-150 ease-in-out">My Portal</a></li>
+                    {% elif user.role == 'DOCTOR' %}
+                        <li><a href="{% url 'doctor_admin:index' %}" class="block bg-secondary text-primary px-3 py-2 rounded-base text-base font-semibold hover:bg-green-200 transition-colors duration-150 ease-in-out">Doctor Portal</a></li>
+                    {% elif user.role == 'ADMIN_OFFICER' %}
+                        <li><a href="{% url 'officer_admin:index' %}" class="block bg-secondary text-primary px-3 py-2 rounded-base text-base font-semibold hover:bg-green-200 transition-colors duration-150 ease-in-out">Officer Portal</a></li>
+                    {% elif user.role == 'MANAGER' %}
+                        <li><a href="{% url 'manager_admin:index' %}" class="block bg-secondary text-primary px-3 py-2 rounded-base text-base font-semibold hover:bg-green-200 transition-colors duration-150 ease-in-out">Manager Portal</a></li>
+                    {% elif user.is_superuser %}
+                            <li><a href="{% url 'admin:index' %}" class="block bg-secondary text-primary px-3 py-2 rounded-base text-base font-semibold hover:bg-green-200 transition-colors duration-150 ease-in-out">Admin Panel</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'logout' %}" class="block px-3 py-2 rounded-base text-base font-medium hover:bg-secondary hover:text-primary transition-colors duration-150 ease-in-out">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}" class="block bg-accent text-text-light px-3 py-2 rounded-base text-base font-semibold hover:opacity-80 transition-opacity duration-150 ease-in-out">Login / Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        {% block messages_override %} 
+         {% if messages %}
+         <div class="container mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-2"> <!-- Adjusted margin for messages -->
+             <div class="messages space-y-3">
+                 {% for message in messages %}
+                        <div class="p-4 rounded-base shadow-md flex items-start
+                                    {% if message.tags == 'success' %}bg-secondary border-l-4 border-primary text-primary
+                                   {% elif message.tags == 'error' or message.tags == 'danger' %}bg-red-100 border-l-4 border-red-500 text-red-700
+                                    {% elif message.tags == 'warning' %}bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700
+                                    {% else %}bg-blue-100 border-l-4 border-blue-500 text-blue-700
+                                    {% endif %}" role="alert">
+                            <!-- Optional: Icon can go here -->
+                         <div class="ml-3">
+                                <p class="text-sm font-medium">{{ message }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        {% endblock messages_override %}
+        {% block content %}
+        <!-- Page-specific content will go here -->
+        {% endblock %}
+    </main>
+
+    <footer class="bg-text-light text-light-bg py-8 text-center mt-auto">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-sm">© {% now "Y" %} Island Dental Booking System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    {% block extra_scripts %}
+    <script>
+        // Basic JavaScript for mobile menu toggle
+        const menuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (menuButton && mobileMenu) {
+            menuButton.addEventListener('click', () => {
+                const isHidden = mobileMenu.classList.contains('hidden');
+                mobileMenu.classList.toggle('hidden', !isHidden); // Explicitly set hidden based on current state
+                menuButton.setAttribute('aria-expanded', isHidden); // Update aria state
+            });
+        }
+    </script>
+    {% endblock %}
+</body>
+</html>

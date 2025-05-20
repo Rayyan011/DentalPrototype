@@ -1,0 +1,29 @@
+{
+  "name": "dentalprototype",
+  "version": "1.0.0",
+  "description": "A web-based booking and management system for **Island Dental**, a chain of dental clinics in the Maldives.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tailwind:init": "tailwindcss init -p",
+    "tailwind:build": "tailwindcss -i ./assets/css/input.css -o ./static/css/output.css",
+    "tailwind:watch": "tailwindcss -i ./assets/css/input.css -o ./static/css/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rayyan011/DentalPrototype.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rayyan011/DentalPrototype/issues"
+  },
+  "homepage": "https://github.com/Rayyan011/DentalPrototype#readme",
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.10",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17"
+  }
+}

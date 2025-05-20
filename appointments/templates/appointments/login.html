@@ -1,62 +1,112 @@
-{% extends "appointments/base.html" %}
+{% extends "base.html" %}
+{% load static %}
 
 {% block title %}Login - Island Dental{% endblock %}
 
+{% block messages_override %}
+    <!-- Suppressing global messages on login page, form errors will display below -->
+{% endblock messages_override %}
+
 {% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white text-center">
-                    <h3>Island Dental Login</h3>
+<div class="flex items-center justify-center min-h-[calc(100vh-10rem)] py-12 px-4 sm:px-6 lg:px-8">
+    <!-- min-h-[calc(100vh-10rem)] roughly accounts for header/footer height to better center content vertically -->
+    <div class="max-w-md w-full space-y-8 bg-white p-8 sm:p-10 rounded-xl shadow-xl">
+        <div>
+            <h2 class="mt-2 text-center text-3xl font-bold tracking-tight text-primary">
+                Sign in to your account
+            </h2>
+            <!-- Test accounts info - kept as is -->
+            <div class="mt-3 text-center text-sm text-muted-text">
+                <p class="font-medium">Test Accounts:</p>
+                <div class="space-y-0.5"> <!-- Slightly reduce space between credential lines -->
+                    <p>Admin : <code>admin/admin123</code></p>
+                    <p>Customer: <code>customer/customer123</code></p>
+                    <p>Doctor: <code>doctor1/doctor1123</code></p>
+                    <p>Admin Officer: <code>officer/officer123</code></p>
+                    <p>Manager: <code>manager/manager123</code></p>
                 </div>
-                <div class="card-body">
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                    
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="id_username" class="form-label">Username</label>
-                            <input type="text" name="username" class="form-control" id="id_username" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="id_password" class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" id="id_password" required>
-                        </div>
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Login</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="card-footer text-center">
-                    <div class="small">
-                        <h5>Test Accounts</h5>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <ul class="list-unstyled">
-                                    <li>Admin: admin/admin123</li>
-                                    <li>Manager: manager/manager123</li>
-                                    <li>Doctor1: doctor1/doctor1123</li>
-                                </ul>
-                            </div>
-                            <div class="col-md-6">
-                                <ul class="list-unstyled">
-                                    <li>Officer: officer/officer123</li>
-                                    <li>Customer: customer/customer123</li>
-                                    <li>Doctor2: doctor2/doctor2123</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <p class="mt-2 text-xs font-semibold text-accent bg-yellow-50 p-2 rounded-md inline-block">
+                    Note: Test credentials are for development and will be removed in production.
+                </p>
             </div>
         </div>
+
+        {% if form.non_field_errors %}
+            <div class="bg-red-50 border-l-4 border-red-400 text-red-700 p-4 rounded-md" role="alert">
+                {% for error in form.non_field_errors %}
+                    <p class="text-sm font-medium">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form class="mt-8 space-y-6" method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+            
+            <div class="space-y-4">
+                <div>
+                    <label for="{{ form.username.id_for_label }}" class="block text-sm font-medium text-muted-text">Username</label>
+                    <div class="mt-1">
+                        <input id="{{ form.username.id_for_label }}" name="{{ form.username.name }}" type="text" autocomplete="username" required
+                               value="{{ form.username.value|default:'' }}"
+                               class="appearance-none block w-full px-3 py-2.5 border rounded-base shadow-sm 
+                                      placeholder-gray-400 focus:outline-none 
+                                      {% if form.username.errors %}border-red-500 ring-1 ring-red-500{% else %}border-border-gray focus:ring-primary focus:border-primary{% endif %} 
+                                      sm:text-sm">
+                    </div>
+                    {% if form.username.errors %}
+                        <div class="mt-1.5 text-xs text-red-600">
+                            {% for error in form.username.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label for="{{ form.password.id_for_label }}" class="block text-sm font-medium text-muted-text">Password</label>
+                    <div class="mt-1">
+                        <input id="{{ form.password.id_for_label }}" name="{{ form.password.name }}" type="password" autocomplete="current-password" required
+                               class="appearance-none block w-full px-3 py-2.5 border rounded-base shadow-sm 
+                                      placeholder-gray-400 focus:outline-none 
+                                      {% if form.password.errors %}border-red-500 ring-1 ring-red-500{% else %}border-border-gray focus:ring-primary focus:border-primary{% endif %} 
+                                      sm:text-sm">
+                    </div>
+                    {% if form.password.errors %}
+                        <div class="mt-1.5 text-xs text-red-600">
+                            {% for error in form.password.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end mt-6"> <!-- Changed justify-between to justify-end -->
+                <!-- <div class="flex items-center"> -->
+                    <!-- Placeholder for "Remember me" functionality if added later -->
+                <!-- </div> -->
+                <div class="text-sm">
+                    <a href="#" class="font-medium text-primary hover:text-green-700">
+                        Forgot your password?
+                    </a>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <button type="submit"
+                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-base shadow-sm text-sm font-medium text-white bg-primary hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-700 transition-colors">
+                    Sign in
+                </button>
+            </div>
+        </form>
+
+        <p class="mt-8 text-center text-sm text-muted-text">
+            Not a member yet? 
+            <a href="#" class="font-medium text-primary hover:text-green-700">
+                Create an account
+            </a>
+        </p>
     </div>
 </div>
-{% endblock %} 
+{% endblock %}
