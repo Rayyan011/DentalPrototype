@@ -234,6 +234,13 @@ The `setup_clinic_rotation` management command configures the doctor rotation.
 Documentation maintained by Rayyan011 and contributors.
 
 ## Docker setup 
+
+**1. Install Node.js dependencies and build frontend styles (on your host machine):**
+Before building or running the Docker containers, you need to generate the project's CSS assets using Tailwind. Ensure you have Node.js and npm installed on your host system. From the project root (`DentalPrototype/`):
+```bash
+- npm install
+- npm run tailwind:build
+
 - git clone -b dev https://github.com/Rayyan011/DentalPrototype.git
 - docker-compose up -d --build
 - docker-compose run --rm backend python manage.py migrate
