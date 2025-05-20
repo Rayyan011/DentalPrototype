@@ -1,0 +1,61 @@
+# .env
+# Environment variables for the Island Dental Booking System Docker setup
+
+# --- PostgreSQL Database Settings ---
+# These are used by the 'db' (PostgreSQL) service to initialize the database
+# and by the 'backend' (Django) service to connect to it.
+
+# Name of the database to be created by PostgreSQL
+POSTGRES_DB=dentalclinic_db
+
+# Username for the PostgreSQL database
+POSTGRES_USER=django_user
+
+# Password for the PostgreSQL user.
+# !!! USE A STRONG, UNIQUE PASSWORD IN A REAL ENVIRONMENT !!!
+POSTGRES_PASSWORD=yourREALLYstrongP@ssw0rd123!
+
+# These are specifically for Django's DATABASES setting in settings.py
+# They usually mirror the POSTGRES_ variables above for this setup.
+DATABASE_ENGINE=django.db.backends.postgresql
+DATABASE_DB=${POSTGRES_DB}
+DATABASE_USER=${POSTGRES_USER}
+DATABASE_PASSWORD=${POSTGRES_PASSWORD}
+DATABASE_HOST=db # This MUST match the service name of your PostgreSQL container in docker-compose.yml
+DATABASE_PORT=5432
+
+
+# --- Django Application Settings ---
+
+# Django Secret Key
+# Generate a new, random, and long key. You can use an online generator
+# or Django's get_random_secret_key() from django.core.management.utils
+# !!! THIS IS A CRITICAL SECURITY SETTING - KEEP IT SECRET AND UNIQUE !!!
+DJANGO_SECRET_KEY=replace_this_with_a_very_long_random_and_unguessable_secret_key_for_your_project_#(*@!
+
+# Debug Mode
+# Set to '1' for development (True) to get detailed error pages.
+# Set to '0' for production (False) for security and performance.
+DJANGO_DEBUG=1
+
+# Allowed Hosts
+# A space-separated list of hostnames/IPs your Django site can serve.
+# For local development with Nginx on port 8080 (or 80), include:
+# 'localhost' and '127.0.0.1'.
+# For production, replace/add your actual domain(s), e.g., 'islanddental.mv www.islanddental.mv'.
+DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1
+
+
+# --- Optional: Other Django Settings (Uncomment and set if needed) ---
+
+# Email backend settings (example for console backend during development)
+# DJANGO_EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+# For SMTP:
+# DJANGO_EMAIL_HOST=your_smtp_server.com
+# DJANGO_EMAIL_PORT=587
+# DJANGO_EMAIL_USE_TLS=True
+# DJANGO_EMAIL_HOST_USER=your_email_username
+# DJANGO_EMAIL_HOST_PASSWORD=your_email_password
+
+# Example for any other API keys or third-party service credentials
+# SOME_API_KEY=abcdef123456
